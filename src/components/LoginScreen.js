@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import Logo from './Logo';
 import Wallpaper from './Wallpaper';
-import ButtonSubmit from './ButtonSubmit';
 import Dimensions from 'Dimensions';
 import UserInput from './UserInput';
-
 import usernameImg from '../images/username.png';
 import passwordImg from '../images/password.png';
 import eyeImg from '../images/eye_black.png';
@@ -30,16 +28,39 @@ export default class LoginScreen extends Component {
 			showPass: true,
 			press: false,
 			isLoading: false,
+			userNameText: null,
+            passwordText: null,
 		};
 		this.showPass = this.showPass.bind(this);
 		this.buttonAnimated = new Animated.Value(0);
 		this.growAnimated = new Animated.Value(0);
 		this._onPress = this._onPress.bind(this);
 	}
+	checkPass(){
+		let matchString=/^[a-zA-Z]\w{5,17}$/;
+		if(this.state.userNameText===''||this.state.userNameText===null){
+			console.log("---用户名空");
+			return false;
+
+		}else if((this.state.passwordText===''||this.state.passwordText===null)){
+			console.log("密码空");
+			return false;
+		}else if(!matchString.test(this.state.passwordText)){
+			//以字母开头，长度在6~18之间，只能包含字符、数字和下划线。 
+			console.log("6-18");
+			
+			return false;
+		}
+		else return true;
+	}
 	_onPress() {
 		if (this.state.isLoading) return;
+		if(!this.checkPass()){
 
+			return;
+		}
 		this.setState({ isLoading: true });
+		console.log("username "+this.state.userNameText+" password "+this.state.passwordText);		
 		Animated.timing(
 			this.buttonAnimated,
 			{
@@ -91,11 +112,13 @@ export default class LoginScreen extends Component {
 					<UserInput source={usernameImg}
 						placeholder='Username'
 						autoCapitalize={'none'}
+						onChangeText={(text) => this.setState({userNameText: text})}
 						returnKeyType={'done'}
 						autoCorrect={false} />
 					<UserInput source={passwordImg}
 						secureTextEntry={this.state.showPass}
 						placeholder='Password'
+						onChangeText={(text) => this.setState({passwordText: text})}						
 						returnKeyType={'done'}
 						autoCapitalize={'none'}
 						autoCorrect={false} />

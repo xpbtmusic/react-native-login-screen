@@ -19,6 +19,9 @@ export default class UserInput extends Component {
 					autoCorrect={this.props.autoCorrect}
 					autoCapitalize={this.props.autoCapitalize}
 					returnKeyType={this.props.returnKeyType}
+					onChangeText={(text) => {
+						this.props.onChangeText(text)
+					}}
 					placeholderTextColor='white'
 					underlineColorAndroid='transparent' />
 			</View>
